@@ -1,0 +1,97 @@
+html
+ head
+  meta(http-equiv="X-UA-Compatible", content="IE=edge")
+  meta(charset='utf-8')
+  meta(name='viewport', content='width=device-width')
+  title= "Solve for me"
+  link(href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css", rel='stylesheet')
+  script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js')
+  script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js')
+  script(src="https://unpkg.com/lnpay-js@^0.1/dist/lnpay.min.js")
+  
+  //script(async, src="https://ackee.paramdeep.ml/tracker.js", data-ackee-server="https://ackee.paramdeep.ml", data-ackee-domain-id="48c894d9-0bce-4a96-b388-6cff7e8178ba")
+  
+  
+  style
+    include ./index.css
+    include ./common.css
+  
+ body
+  nav(class='navbar navbar-inverse')
+    div(class='container-fluid')
+      div(class='navbar-header')
+        a(class='navbar-brand', href=root_domain) Solve For Me
+    
+      if unsolvedProblems
+        ul(class='nav navbar-nav')
+          li(class='active')
+            a(href=root_domain) Home
+          li
+            a(href='./submit_a_problem') Submit Problem
+          li
+            a(href='./closed_puzzles') Solved Problems
+      else
+        ul(class='nav navbar-nav')
+          li(class='')
+            a(href=root_domain) Home
+          li
+            a(href='./submit_a_problem') Submit Problem
+          li(class='active')
+            a(href='./closed_puzzles') Solved Problems
+      
+      ul(class='nav navbar-nav navbar-right')
+        li
+          a(href='/faq_page')
+            span(class="glyphicon glyphicon-bitcoin")
+            span(class='nav_elements_font') what is this? (FAQ)
+        if userAuthenticated
+          div(class="nav navbar-nav navbar-right")
+            div(class='dropdown')
+              button(class="dropbtn nav_elements_font")='Hello '+userName+"▼"
+              div(class="dropdown-content")
+                a(href=root_domain+'/profile/'+userName) Profile
+                a(href='')=balance
+                a(href=root_domain+'/signout') Sign out
+        else
+          li
+            a(href='./signup')
+              span(class="glyphicon glyphicon-user")
+              span(class='nav_elements_font') Sign up
+          li
+            a(href='./signin')
+              span(class='glyphicon glyphicon-log-in')
+              span(class='nav_elements_font')  Log in
+              
+  if unsolvedProblems
+    div(id='banner_container')  
+      div(id='puzzle_feed_div')
+        div(class='puzzle_card shadow')
+          div(class='puzzle_card_title')
+            p(class='puzzle_title_text')= "What is lnsolve?"
+          div(class='puzzle_card_poster')
+            p(class='puzzle_poster_text')= '@satoshi'
+          div(class='puzzle_card_description')
+            p(class='puzzle_description_text') lnsolve is a platform where you get paid bitcoin for solving problems. You can submit a problem or solve some listed below.
+          div(class='puzzle_card_options')
+          
+    
+  div(id='main_container')
+    div(id='puzzle_feed_head_div')
+      if unsolvedProblems
+        h(class='heading_font') Unsolved Puzzles
+      else
+        h(class='heading_font') Already Solved Puzzles
+
+    div(id='puzzle_feed_div')
+      each val in data
+        div(class='puzzle_card shadow')
+          div(class='puzzle_card_title')
+            p(class='puzzle_title_text')= val.title
+          div(class='puzzle_card_poster')
+            p(class='puzzle_poster_text')= '@'+val.poster
+          div(class='puzzle_card_description')
+            p(class='puzzle_description_text')= val.description
+          div(class='puzzle_card_options')
+            a(class='btn', href='./problem/'+val._id) See Problem
+            a(class='btn reward-banner')="Reward: "+val.bounty+" sats"
+

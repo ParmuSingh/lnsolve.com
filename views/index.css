@@ -1,0 +1,130 @@
+body {
+  background-color: black;
+  overflow-y: auto;
+}
+
+body::-webkit-scrollbar {
+    display: none;
+}
+
+::-webkit-scrollbar { 
+  display: none; 
+}
+
+#main_container { /*the main container that contains #puzzle_feed_head_div and #puzzle_feed_div*/
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  padding-left: 10%;
+  padding-right: 10%;
+
+}
+
+#banner_container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  margin-bottom: 30px;
+  padding-left: 10%;
+  padding-right: 10%;
+}
+#banner {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  height: 100px;
+  background-color: #302c30;
+}
+.banner_font {
+  font-size: 15;
+  font-family: sans-serif;
+}
+
+#puzzle_feed_head_div { /*a div above puzzles. mostly to be used a header*/
+  padding-left: 2%;
+  background-color: #302c30;
+}
+
+#puzzle_feed_div { /*the main div where puzzle cards are populated*/
+  display: flex;
+  flex-direction: column;
+  background-color: #302c30;
+}
+
+.puzzle_card { /*the css element describing each puzzle card*/
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  height: 240px;
+  width: 100%;
+  padding-left: 2%;
+  padding-right: 2%;
+  background-color: #262324;
+}
+
+.shadow{ /*adds shadow effect on div*/
+  box-shadow: 4px 3px 8px 1px #020202;
+	-webkit-box-shadow: 4px 3px 8px 1px #020202;
+}
+
+.heading_font {
+  color: #e5dae0;
+  font-size: 20;
+}
+
+.puzzle_card_title {
+  /* height: 20%; */
+}
+
+.puzzle_title_text {
+  color: #e5dae0;
+  font-size: 30;
+  white-space: break-spaces;
+  word-break: break-word;
+}
+
+.puzzle_card_poster {
+  height: 8%;
+}
+
+.puzzle_poster_text {
+  color: #e5dae0;
+  font-size: 10;
+}
+
+.puzzle_card_description {
+  height: 52%;
+  background-color: #292930;
+  /* overflow: auto; */
+  overflow-y: scroll;
+}
+
+.puzzle_description_text {
+  color: #e5dae0;
+  white-space: break-spaces;
+  word-break: break-word;
+}
+
+.puzzle_card_options {
+  height: 20
+}
+
+.btn {
+  display: inline-block;
+  font-weight: 400;
+  border: 1px solid transparent;
+  color: rgb(232, 230, 227);
+  background-color: rgb(0, 98, 204);
+}
+
+.reward-banner {
+  margin-left: 10px;
+  background-color: #b7900e;
+
+}
+
+.nav_elements_font {
+  font-family: sans-serif;
+}

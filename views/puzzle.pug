@@ -1,0 +1,107 @@
+html
+  head
+    meta(http-equiv="X-UA-Compatible", content="IE=edge")
+    meta(charset='utf-8')
+    meta(name='viewport', content='width=device-width')
+    title=title
+    link(href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css", rel='stylesheet')
+    script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js')
+    script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js')
+
+    script
+      include ./puzzle.js
+    style
+      include ./puzzle.css
+      include ./common.css
+  
+  body
+    nav(class='navbar navbar-inverse')
+      div(class='container-fluid')
+        div(class='navbar-header')
+          a(class='navbar-brand', href=root_domain) Solve For Me
+        ul(class='nav navbar-nav')
+          li(class='')
+            a(href=root_domain) Home
+          li
+            a(href=root_domain+'/submit_a_problem') Submit Problem
+        ul(class='nav navbar-nav navbar-right')
+          li
+            a(href=root_domain+'/faq_page')
+              span(class="glyphicon glyphicon-bitcoin")
+              span(class='nav_elements_font') what is this? (FAQ)
+          if userAuthenticated
+            div(class="nav navbar-nav navbar-right")
+              div(class='dropdown')
+                button(class="dropbtn nav_elements_font")='Hello '+userName+"▼"
+                div(class="dropdown-content")
+                  a(href=root_domain+'/profile/'+userName) Profile
+                  a(href='')=balance
+                  a(href=root_domain+'/signout') Sign out
+          else
+            li
+              a(href=root_domain+'/signup')
+                span(class='glyphicon glyphicon-user') Signup
+            li
+              a(href=root_domain+'/signin')
+                span(class='glyphicon glyphicon-log-in') Login
+
+    
+    div(id='main_container')
+      div(id='full_puzzle_div', class='puzzle_card shadow')
+        p(class='data_invisible', id='data_problem_id')=problem_id
+        div(class='puzzle_card_title')
+          p(id='id_puzzle_title', class='puzzle_title_text')=title
+        div(class='puzzle_card_poster')
+          p(id='id_puzzle_poster', class='puzzle_poster_text')='@'+poster
+        div(class='full_puzzle_card_description')
+          p(id='id_puzzle_description', class='puzzle_description_text')=description
+        div(style='height: 40px') <!--dummy_div-->
+         a(class='btn reward-banner')="Reward: "+bounty+" sats"
+
+    
+      form(id='user_solution_form')
+        div(id='user_solution_description')
+          label(class='sub_heading_font', for='user_solution_description_field') Post your solution
+          textarea(id='user_solution_description_field', type="text", placeholder="your solution..", name="user_solution_description_field", required)
+        div(id='user_solution_options')
+          font(id='message')
+          a(class='btn', onclick='submit_solution()') Post your solution
+        div(class='dummy_div')
+    
+    
+      div(id='solutions_div')
+        div(id='puzzle_feed_head_div')
+          h(class='heading_font') Answers
+        if nAnswers>0
+          each val in answers
+            div(class='solution_div')
+              
+              div(class='voting_div shadow')
+                div(class='upvote_div', onclick='vote(\''+val._id+'\', \'up\')')
+                  span(id=val._id+'_upvote', class='glyphicon glyphicon-arrow-up')
+                div(class='downvote_div', onclick='vote(\''+val._id+'\', \'down\')')
+                  span(id=val._id+'_downvote', class='glyphicon glyphicon-arrow-down')
+              
+              div(class='puzzle_card shadow')
+                div(style='height: 20px')
+                div(class='full_puzzle_card_description')
+                  p(class='puzzle_description_text')=val.solution
+                div(class='puzzle_card_poster')
+                  p(class='puzzle_poster_text')='@'+val.poster
+                div(class='puzzle_card_options')
+                  font(class='message', id='message-'+val._id)
+                  if hasAcceptedSolution
+                    if val._id == acceptedSolution
+                      a(class='btn btn_green') ✔️Accepted Answer
+                  else
+                    if userIsProblemPoster
+                      if val.poster != userName
+                        a(class='btn btn_green', onclick='accept_solution(\''+val._id+ '\')') Accept Answer
+                    
+        else
+          div(class='solution_div puzzle_card shadow')
+            div(style='height: 20px')
+            div(class='puzzle_card_poster')
+              p(class='puzzle_poster_text')='no solutions yet'
+            div(style='height: 20px')
+      

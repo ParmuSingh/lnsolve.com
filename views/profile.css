@@ -1,0 +1,64 @@
+body {
+  background-color: black;
+  overflow-y: auto;
+}
+
+#main_container { /*the main container that contains #puzzle_feed_head_div and #puzzle_feed_div*/
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  padding-left: 10%;
+  padding-right: 10%;
+}
+
+.profile-div {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  background-color: #262324;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  /* width: 80%;
+  background-color: black; */
+}
+
+.puzzle_card { /*the css element describing each puzzle card*/
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  height: 400px;
+  width: 50%;
+  padding-left: 2%;
+  padding-right: 2%;
+  background-color: #262324;
+  justify-content: center;
+}
+
+.shadow{ /*adds shadow effect on div*/
+  box-shadow: 4px 3px 8px 1px #020202;
+	-webkit-box-shadow: 4px 3px 8px 1px #020202;
+}
+
+.sub_heading_font {
+  color: #e5dae0;
+  font-size: 30;
+}
+
+.btn {
+  display: inline-block;
+  width: 20%;
+  font-weight: 400;
+  border: 1px solid transparent;
+  color: rgb(232, 230, 227);
+  background-color: rgb(0, 98, 204);
+}
+
+#message {
+  color: #b2102d;
+  font-size: 15;
+  display: none;
+}

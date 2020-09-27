@@ -1,0 +1,110 @@
+body {
+  background-color: black;
+  overflow-y: auto;
+}
+
+#main_container { /*the main container */
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  padding-left: 10%;
+  padding-right: 10%;
+
+}
+
+#submit_problem_form { /*the main div where puzzle cards are populated*/
+  display: flex;
+  flex-direction: column;
+  background-color: #302c30;
+  height: 70%;
+  padding-left: 8%;
+  padding-right: 8%;
+  justify-content: center;
+}
+
+#title {
+  display: flex;
+  flex-direction: column;
+
+}
+
+#description {
+  display: flex;
+  flex-direction: column;
+  height: 80%;
+}
+#description_field {
+  display: flex;
+  flex-direction: column;
+  height: 90%;
+}
+
+.sub_heading_font {
+  color: #e5dae0;
+  font-size: 15;
+}
+
+textarea, input {
+  background-color: #2b2424;
+}
+
+textarea, input[type=text], input[type=password] {
+  border: none;        /* Remove default borders */
+  padding: 4px 8px;
+  border-radius: 12px; /* Sadly outline does not round! therefore...*/
+  color: white;
+}
+textarea, input[type=text]:focus, input[type=password]:focus{
+  outline: none;      /* Remove default outline and use border or box-shadow */
+  box-shadow: 0 0 0 2px orange; /* Full freedom. (works also with border-radius) */
+}
+
+#options {
+  height: 25%;
+}
+
+#message {
+  color: #b2102d;
+  font-size: 15;
+  display: none;
+}
+#post_problem_btn_message {
+  color: green;
+  font-size: 12;
+  display: none;
+}
+
+.btn {
+  display: inline-block;
+  font-weight: 400;
+  border: 1px solid transparent;
+  color: rgb(232, 230, 227);
+  background-color: rgb(0, 98, 204);
+}
+
+.dummy_div {
+  height: 50px;
+}
+
+.info-box {
+  background-color: rgba(198, 190, 33, 0.75);
+  height: 50px;
+  width: 80%;
+}
+
+#info-text {
+  color: white;
+  font-size: 15;
+}
+
+#pay_req_text {
+  /* display: none; */
+  width: 55%;
+}
+
+/* .options-btn-box {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+} */

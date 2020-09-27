@@ -1,0 +1,94 @@
+body {
+  background-color: black;
+  overflow-y: auto;
+}
+
+#main_container { /*the main container that contains #full_puzzle_div and */
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  padding-left: 10%;
+  padding-right: 10%;
+  justify-content: center;
+}
+
+#inner_container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  height: 80%;
+}
+
+#signup_form_div {
+  display: flex;
+  flex-direction: column;
+  width: 350px;
+  height: 60%;
+  background-color: #302c30;
+  justify-content: space-around;
+}
+
+
+#signup_heading {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: center;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-left: 10%;
+  padding-right: 10%;
+}
+
+#password_do_not_match_text {
+  color: #b2102d;
+  font-size: 10;
+  display: none;
+}
+
+.heading_font {
+  color: #e5dae0;
+  font-size: 20;
+}
+
+.sub_heading_font {
+  color: #e5dae0;
+  font-size: 15;
+}
+
+.btn {
+  display: inline-block;
+  font-weight: 400;
+  border: 1px solid transparent;
+  color: rgb(232, 230, 227);
+  background-color: rgb(0, 98, 204);
+}
+
+.nav_elements_font {
+  font-family: sans-serif;
+}
+
+
+#signup_btn {
+  margin-top: 20px;
+}
+
+textarea, input {
+  background-color: #2b2424;
+}
+
+textarea, input[type=text], input[type=password] {
+  border: none;        /* Remove default borders */
+  padding: 4px 8px;
+  border-radius: 12px; /* Sadly outline does not round! therefore...*/
+  color: white;
+}
+textarea, input[type=text]:focus, input[type=password]:focus{
+  outline: none;      /* Remove default outline and use border or box-shadow */
+  box-shadow: 0 0 0 2px orange; /* Full freedom. (works also with border-radius) */
+}

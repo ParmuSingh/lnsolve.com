@@ -1,0 +1,125 @@
+<html>
+  <title>FAQ - wtf is this website?</title>
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/forge/0.8.2/forge.all.min.js"></script>
+
+    <link href="./index.css" type="text/css" rel="stylesheet">
+    <link href="./common.css" type="text/css" rel="stylesheet">
+    <script src="./signin.js"></script>
+  </head>
+
+  <body>
+    <nav class="navbar navbar-inverse">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a id="nav_name" class="navbar-brand" href="https://">Solve For Me</a>
+        </div>
+        <ul class="nav navbar-nav">
+          <li class=""><a id="nav_home" href="https://">Home</a></li>
+          <li><a id="nav_submit" href="https://">Submit Problem</a></li>
+        </ul>
+
+      <!--
+        <ul class="nav navbar-nav navbar-right">
+          <div class="dropdown">
+            <button class="dropbtn">Social Media</button>
+            <div class="dropdown-content">
+
+              <a href="#">Row 1</a>
+              <a href="#">Row 2</a>
+              <a href="#">Row 3</a>
+
+            </div>
+          </div>
+        </ul>
+      -->
+        <!--<ul class="nav navbar-nav navbar-right">
+          <li>
+            <a id="nav_signup" href="https://">
+              <span class="glyphicon glyphicon-user"></span>
+              <span class='nav_elements_font'> Signup</span>
+            </a>
+          </li>
+          <li>
+            <a id="nav_signin" href="https://">
+              <span class="glyphicon glyphicon-log-in"></span>
+              <span class='nav_elements_font'> Login</span>
+            </a>
+          </li>
+        </ul>-->
+      </div>
+    </nav>
+
+    <div id='main_container'>
+      <div id="puzzle_feed_head_div">
+        <h class="heading_font">FAQ</h>
+      </div>
+      <div id="puzzle_feed_div">
+        <div class="puzzle_card shadow">
+          <div class='puzzle_card_title'>
+            <p class='puzzle_title_text'>What is lnsolve.com ?</p>
+          </div>
+          <div class='puzzle_card_description'>
+            <p class='puzzle_description_text'>It's a forum for asking and answering questions!</p>
+          </div>
+        </div>
+
+        <div class="puzzle_card shadow">
+          <div class='puzzle_card_title'>
+            <p class='puzzle_title_text'>How can I earn bitcoin on lnsolve.com?</p>
+          </div>
+          <div class='puzzle_card_description'>
+            <p class='puzzle_description_text'>You earn bitcoin by answering questions. Once the solution is accecpted you're automatically paid the bounty in bitcoin.</p>
+          </div>
+        </div>
+
+        <div class="puzzle_card shadow">
+          <div class='puzzle_card_title'>
+            <p class='puzzle_title_text'>How can I withdraw the bitcoin I've earned?</p>
+          </div>
+          <div class='puzzle_card_description'>
+            <p class='puzzle_description_text'>Your bitcoin can be withdrawn via the lighting network.</p>
+          </div>
+        </div>
+
+        <div class="puzzle_card shadow">
+          <div class='puzzle_card_title'>
+            <p class='puzzle_title_text'>Who puts the bounty on the problems?</p>
+          </div>
+          <div class='puzzle_card_description'>
+            <p class='puzzle_description_text'>The poster of the problem sets and pays the bounty</p>
+          </div>
+        </div>
+
+        <div class="puzzle_card shadow">
+          <div class='puzzle_card_title'>
+            <p class='puzzle_title_text'>How is it different from other platforms?</p>
+          </div>
+          <div class='puzzle_card_description'>
+            <p class='puzzle_description_text'>In other forums there is no incentive for people to answer questions. Which is why a lot of questions are left unanswered.</p>
+            <p class='puzzle_description_text'>In lnsolve.com people get paid in bitcoin when they answer correctly. So there's a strong incentive to answer questions.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+
+  </body>
+
+  <script>
+    root_domain = window.location.href.split('/')[2]
+    document.getElementById('nav_name').href = "https://"+root_domain
+    document.getElementById('nav_home').href = "https://"+root_domain
+    document.getElementById('nav_submit').href = "https://"+root_domain+"/submit_a_problem"
+    document.getElementById('nav_signup').href = "https://"+root_domain+"/signup"
+    document.getElementById('nav_signin').href = "https://"+root_domain+"/signin"
+  </script>
+</html>

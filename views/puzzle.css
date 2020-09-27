@@ -1,0 +1,221 @@
+body {
+  background-color: black;
+  overflow-y: auto;
+}
+
+::-webkit-scrollbar { 
+  display: none; 
+}
+
+#main_container { /*the main container that contains #full_puzzle_div and */
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  padding-left: 10%;
+  padding-right: 10%;
+
+}
+
+#full_puzzle_div { /*the main div where puzzle cards are populated*/
+  /* padding-left: 5%;
+  padding-right: 5%; */
+  display: flex;
+  flex-direction: column;
+  background-color: #302c30;
+}
+
+#puzzle_feed_head_div { /*a div above puzzles. mostly to be used a header*/
+  padding-left: 2%;
+  background-color: #302c30;
+}
+
+.puzzle_card { /*the css element describing each puzzle card*/
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  /* height: 240px; */
+  width: 100%;
+  padding-left: 2%;
+  padding-right: 2%;
+  background-color: #262324;
+  justify-content: space-between;
+}
+
+.voting_div {
+  margin-top: 20px;
+  /* display: flex; */
+  display: none;
+  flex-direction: column;
+  height: 80;
+  width: 2%;
+  /* padding-left: 2%; */
+  /* padding-right: 2%; */
+  background-color: #262324;
+  /* justify-content: space-between; */
+}
+
+.upvote_div {
+  display: flex;
+  flex-direction: column;
+  height: 50%;
+  justify-content: center;
+}
+
+.downvote_div {
+  display: flex;
+  flex-direction: column;
+  height: 50%;
+  justify-content: center;
+}
+
+.arrow-selected {
+  color: #b2102d;
+}
+
+#user_solution_form { /*the main div where puzzle cards are populated*/
+  display: flex;
+  flex-direction: column;
+  background-color: #302c30;
+  /*height: 70%;*/
+  padding-left: 2%;
+  padding-right: 2%;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+#user_solution_description {
+  display: flex;
+  flex-direction: column;
+  height: 200px;
+}
+#user_solution_description_field {
+  display: flex;
+  flex-direction: column;
+  height: 90%;
+}
+
+textarea, input {
+  background-color: #2b2424;
+}
+
+textarea, input[type=text], input[type=password] {
+  border: none;        /* Remove default borders */
+  padding: 4px 8px;
+  border-radius: 12px; /* Sadly outline does not round! therefore...*/
+  color: white;
+}
+textarea, input[type=text]:focus, input[type=password]:focus{
+  outline: none;      /* Remove default outline and use border or box-shadow */
+  box-shadow: 0 0 0 2px orange; /* Full freedom. (works also with border-radius) */
+}
+
+#options {
+  height: 20
+}
+
+#message, .message {
+  color: #b2102d;
+  font-size: 10;
+  display: none;
+}
+
+
+#solutions_div {
+  margin-top: 20px;
+  background-color: #383133;
+}
+
+.solution_div {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  margin-top: 10px;
+}
+
+.shadow{ /*adds shadow effect on div*/
+  box-shadow: 4px 3px 8px 1px #020202;
+	-webkit-box-shadow: 4px 3px 8px 1px #020202;
+}
+
+.heading_font {
+  color: #e5dae0;
+  font-size: 20;
+}
+
+.puzzle_card_title {
+  /*height: 40px;*/
+  /* overflow-x: scroll; */
+}
+.puzzle_card_title::-webkit-scrollbar {
+  display: none;
+}
+
+.puzzle_title_text {
+  color: #e5dae0;
+  font-size: 30;
+  white-space: break-spaces;
+  word-break: break-word;
+}
+
+.puzzle_card_poster {
+  height: 20px;
+}
+
+.puzzle_poster_text {
+  color: #e5dae0;
+  font-size: 10;
+}
+
+.full_puzzle_card_description {
+  /*height: 52%;*/
+  max-height: 500px;
+  background-color: #292930;
+  /* overflow: auto; */
+  display: block;
+  overflow-y: scroll;
+}
+
+.puzzle_description_text {
+  color: #e5dae0;
+  font-size: 20;
+  width: 100%;
+  max-height: 100%;
+  white-space: break-spaces;
+  word-wrap: break-word;
+}
+
+.puzzle_card_options {
+  /*height: 40px;*/
+}
+
+.data_invisible {
+  display: none;
+}
+
+.btn {
+  display: inline-block;
+  font-weight: 400;
+  border: 1px solid transparent;
+  color: rgb(232, 230, 227);
+  background-color: rgb(0, 98, 204);
+}
+
+.btn_green {
+  background-color: rgb(46, 160, 97);
+}
+
+.dummy_div{
+  height: 10px;
+}
+
+.reward-banner {
+  /* margin-left: 10px; */
+  background-color: #b7900e;
+
+}
+
+.sub_heading_font {
+  color: #e5dae0;
+  font-size: 15;
+}

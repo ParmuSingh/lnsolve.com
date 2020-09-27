@@ -1,0 +1,67 @@
+<html>
+  <title>Sign in - Solve for me</title>
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/forge/0.8.2/forge.all.min.js"></script>
+
+    <link href="./signup.css" type="text/css" rel="stylesheet">
+    <script src="./signin.js"></script>
+  </head>
+
+  <body>
+    <nav class="navbar navbar-inverse">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a id="nav_name" class="navbar-brand" href="https://">Solve For Me</a>
+        </div>
+        <ul class="nav navbar-nav">
+          <li class=""><a id="nav_home" href="https://">Home</a></li>
+          <li><a id="nav_submit" href="https://">Submit Problem</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li><a id="nav_signup" href="https://"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+          <li><a id="nav_signin" href="https://"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <div id='main_container'>
+      <div id='inner_container'>
+        <div id='signup_form_div' class="shadow">
+          <div id='signup_heading'>
+
+            <h class='heading_font'>Log in</h>
+
+          </div>
+          <form>
+            <label class='sub_heading_font' for="username"><b>User name</b></label>
+            <input id='username' type="text" placeholder="Enter User Name" name="username" required>
+
+            <label class='sub_heading_font' for="password"><b>Password</b></label>
+            <input id='password' type="password" placeholder="Enter Password" name="password" required>
+
+            <button onclick="login_user()" id='signup_btn' type='button' class="btn">Log in</button>
+            <font id='password_do_not_match_text'>Incorrect Password!</font>
+          </form>
+        </div>
+      </div>
+    </div>
+
+
+  </body>
+
+  <script>
+    root_domain = "https://"+window.location.href.split('/')[2]
+    document.getElementById('nav_name').href = root_domain
+    document.getElementById('nav_home').href = root_domain
+    document.getElementById('nav_submit').href = root_domain+"/submit_a_problem"
+    document.getElementById('nav_signup').href = root_domain+"/signup"
+    document.getElementById('nav_signin').href = root_domain+"/signin"
+  </script>
+</html>
