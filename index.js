@@ -1,9 +1,7 @@
 // this is the main server file
 
-//server_domain = "13.233.237.14:80"
-server_domain = "https://localhost:10001"
-//server_domain = "lnsolve.com"
-//server_domain = "https://lnsolve.com"
+server_domain = "https://localhost:10001" // use in development
+//server_domain = "https://lnsolve.com" // use in production
 
 
 var fs = require('fs');
@@ -267,16 +265,6 @@ client.connect(function(err) {
   }) // app.get('/profile/')
 
 //------------------------------------------------- bitcoin -------------------------------------------------//
-  app.post('/generate_invoice_btcpay', function(req, res){
-    if(!req.session.userAuthenticated){
-      res.send('not authenticated')
-      return
-    }
-    btcpay_client.create_invoice({price: 1000, currency: 'BTC'})
-      .then(invoice => res.send(invoice.url) )
-      .catch(err => helpers.log(err))
-  }) // app.post('/generate_invoice')
-
   app.get('/generate_invoice', function(req, res){
     if(!req.session.userAuthenticated){
       res.send('not authenticated')
@@ -288,7 +276,9 @@ client.connect(function(err) {
     helpers.request_invoice(res, amt)
   }) // app.get('generate_invoice_lnpay')
 
-  // DISABLED - SECURITY CONCERN [What if user generates lnurl but doesn't use it. And then uses this method to withdraw and then use previously generated lnurl to withdraw more. Double withdraw.]
+  // DISABLED - SECURITY CONCERN
+  // What if user generates lnurl but doesn't use it. And then uses this method to withdraw and then use previously generated lnurl to withdraw more. Double withdraw.
+  
   // app.post('/request_withdrawl', function(req, res){
   //   if(!req.session.userAuthenticated){
   //     res.send('not authenticated')
@@ -524,14 +514,6 @@ client.connect(function(err) {
   }) // app.post('/accept_solution')
 
   app.post('/signup', function(req, res){
-    /*
-    $.post('http://localhost:10000/signup',   // url
-    { id: 'parmu', password: "poop" }, // data to be submit
-    function(data, status, jqXHR) {// success callback
-      //$('p').append('status: ' + status + ', data: ' + data);
-      helpers.log(data)
-    })
-    */
 
     if(!req.body.id || !req.body.password){
         res.status("400");
