@@ -35,7 +35,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(upload.array());
 app.use(cookieParser());
-app.use(session({secret: "C7307C3DDF314AE6FDA8369FB9C49CA85912EF850DB142E06C971F5EBCD8EA7F"}));
+app.use(session({secret: "your secret"}));
 
 var httpsServer = https.createServer(credentials, app);
 // mongodb (official): https://docs.mongodb.com/manual/tutorial/install-mongodb-on-ubuntu/#start-mongodb
