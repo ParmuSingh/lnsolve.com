@@ -26,7 +26,13 @@ body {
   background-color: black; */
 }
 
-.puzzle_card { /*the css element describing each puzzle card*/
+#puzzle_feed_div { /*the main div where puzzle cards are populated*/
+  display: flex;
+  flex-direction: column;
+  background-color: #302c30;
+}
+
+.profile-data { /*the css element describing each puzzle card*/
   margin-top: 20px;
   display: flex;
   flex-direction: column;
@@ -38,9 +44,103 @@ body {
   justify-content: center;
 }
 
+.puzzle_card { /*the css element describing each puzzle card*/
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  height: 250px;
+  width: 100%;
+  padding-left: 2%;
+  padding-right: 2%;
+  background-color: #262324;
+  justify-content: center;
+}
+
+.heading_font {
+  color: #e5dae0;
+  font-size: 20;
+}
+
+.puzzle_card_title {
+  /* height: 20%; */
+}
+
+.puzzle_title_text {
+  color: #e5dae0;
+  font-size: 30;
+  white-space: break-spaces;
+  word-break: break-word;
+}
+
+.puzzle_card_poster {
+  height: 8%;
+}
+
+.puzzle_poster_text {
+  color: #e5dae0;
+  font-size: 10;
+}
+
+.puzzle_card_description {
+  height: 45%;
+  background-color: #292930;
+  /* overflow: auto; */
+  overflow-y: scroll;
+}
+
+.puzzle_description_text {
+  color: #e5dae0;
+  white-space: break-spaces;
+  word-break: break-word;
+}
+
+.reward-banner {
+  background-color: green;
+  width: 30%;
+  color: white;
+}
+
+.received_answer_text {
+  background-color: #24281d;
+  width: 30%;
+  color: white;
+  font-weight: bold;
+}
+
+.answer_accepted_text {
+  background-color: #24281d;
+  width: 30%;
+  color: white;
+  font-weight: bold;
+}
+
+.posted_problem_text {
+  background-color: #24281d;
+  width: 30%;
+  color: white;
+  font-weight: bold;
+}
+
+.puzzle_card_options {
+  height: 20%;
+}
+
 .shadow{ /*adds shadow effect on div*/
   box-shadow: 4px 3px 8px 1px #020202;
 	-webkit-box-shadow: 4px 3px 8px 1px #020202;
+}
+
+
+#solutions_div {
+  margin-top: 20px;
+  background-color: #383133;
+}
+
+.solution_div {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-top: 10px;
 }
 
 .sub_heading_font {

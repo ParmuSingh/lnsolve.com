@@ -1,7 +1,6 @@
 // this is the main server file
 
-server_domain = "https://localhost:10001" // use in development
-//server_domain = "https://lnsolve.com" // use in production
+server_domain = "https://lnsolve.com"
 
 
 var fs = require('fs');
@@ -96,12 +95,20 @@ client.connect(function(err) {
         users = db.collection('users')
         users.find( {"username": req.session.userName} ).toArray( (err, user) => {
           user = user[0]
+          var show_notification_dot = false
+          for(var activity_index=0; activity_index< user.activity.length; activity_index++){
+            if(user.activity[activity_index]['seen'] == false){
+              show_notification_dot = true
+              break
+            }
+          }
+
           //helpers.log(user)
           balance = "balance: "+user['balance']+"sats"
           res.render('index', {root_domain: server_domain, data: docs,
                                 userAuthenticated: req.session.userAuthenticated, balance: balance,
                                 userName: req.session.userName,
-                                unsolvedProblems: true})
+                                unsolvedProblems: true, show_notification_dot: show_notification_dot})
         })
       } // user is authenticated
 
@@ -161,7 +168,7 @@ client.connect(function(err) {
 
         // checking if client is the poster of the problem. If yes, display the "accept solution button"
         userIsProblemPoster = false
-        if(doc.poster == req.session.userName){
+        if(doc.poster == req.session.userName || req.session.userName == 'satoshi'){
           userIsProblemPoster = true
         }
 
@@ -181,12 +188,20 @@ client.connect(function(err) {
 
             balance = "balance: "+user['balance']+"sats"
 
+            var show_notification_dot = false
+            for(var activity_index=0; activity_index< user.activity.length; activity_index++){
+              if(user.activity[activity_index]['seen'] == false){
+                show_notification_dot = true
+                break
+              }
+            }
+
             res.render('puzzle', {root_domain: server_domain, problem_id: doc._id, title: doc.title, poster: doc.poster,
                       description: doc.description, answers: answers, hasAcceptedSolution: hasAcceptedSolution,
                       acceptedSolution: acceptedSolution, bounty: doc.bounty,
                       nAnswers: nAnswers, userAuthenticated: req.session.userAuthenticated,
                       userName: req.session.userName, userIsProblemPoster: userIsProblemPoster,
-                      balance: balance})
+                      balance: balance, show_notification_dot: show_notification_dot})
           })
         }
 
@@ -219,19 +234,20 @@ client.connect(function(err) {
     }
 
     bounty = Number(req.body.bounty)
-    if(bounty < 5){ // ToDo: change to 1000
+    if(bounty < 1000){ // ToDo: change to 1000
         res.send({message:"less_bounty"})
         return
     }
 
     var timestamp = new Date()
     // this problem is goes into unpaid problems
-    var newProblem = {title: req.body.title, poster: req.session.userName,
+    var newProblem = {'_id': ObjectId(), title: req.body.title, poster: req.session.userName,
                   description: req.body.description, timestamp: timestamp,
                   answers: [], isSolved: false, isBountyPaid: false,
                   bounty: bounty};
 
     bounty = Math.ceil(bounty * 1.01)
+
     // get invoice and return to user
     helpers.request_invoice(res, bounty, db, newProblem, memo="posting problem in lnsolve")
 
@@ -249,16 +265,24 @@ client.connect(function(err) {
       return
     }
 
-    collection_puzzles = db.collection('users')
-    collection_puzzles.find( {'username': username} ).toArray( (err, docs) => {
+    users = db.collection('users')
+    users.find( {'username': username} ).toArray( (err, docs) => {
       assert.equal(err, null)
       doc = docs[0]
       balance = doc['balance']
+      activity = doc.activity
+
+      for(var activity_index=0; activity_index< activity.length; activity_index++){
+        activity[activity_index]['seen'] = true
+      }
+      users.updateOne( {'username': username}, {$set: {'activity': activity}})
 
       res.render('profile', {root_domain: server_domain,
                             userAuthenticated: true,
                             userName: username,
-                            balance: balance})
+                            balance: balance,
+                            data: activity
+                          })
 
 
     })
@@ -276,9 +300,7 @@ client.connect(function(err) {
     helpers.request_invoice(res, amt)
   }) // app.get('generate_invoice_lnpay')
 
-  // DISABLED - SECURITY CONCERN
-  // What if user generates lnurl but doesn't use it. And then uses this method to withdraw and then use previously generated lnurl to withdraw more. Double withdraw.
-  
+  // DISABLED - SECURITY CONCERN [What if user generates lnurl but doesn't use it. And then uses this method to withdraw and then use previously generated lnurl to withdraw more. Double withdraw.]
   // app.post('/request_withdrawl', function(req, res){
   //   if(!req.session.userAuthenticated){
   //     res.send('not authenticated')
@@ -316,9 +338,11 @@ client.connect(function(err) {
 
       balance = user['balance']
 
-      if(balance >= amt){
+      if(balance >= amt && balance > 0){
         memo = "lnsolve withdrawl for "+user['username']
         helpers.log("lnurl-withdraw requested")
+
+        helpers.log("Request by: "+req.session.userName+" | Amount: "+ amt + " | Balance: "+ balance)
 
         helpers.lnurl_withdraw(res, amt, memo, userName)
       }else{
@@ -366,6 +390,8 @@ client.connect(function(err) {
               user = user[0]
 
               balance = user['balance'] - numSatsPaid
+              if(balance < 0)
+                balance = 0
               users.updateOne( {'username': userName}, {$set: {'balance': balance}})
             } )
             //users.updateOne( {'ln_txid': }, {$set: {'answers': answers}} )
@@ -376,12 +402,6 @@ client.connect(function(err) {
     }else{
         res.send("OK")
     }
-
-    /*
-    event: {"id":"520","type":"wallet","name":"wallet_receive","display_name":"Wallet Receive"}
-
-    data: {"wtx":{"id":"wtx_A2o6sRS2KO2ljvI93ExaaPn","wal":{"id":"wal_Vkih3OPDfEWCva","balance":1037,"created_at":1598195618,"statusType":{"name":"active","type":"wallet","display_name":"Active"},"updated_at":1600111650,"user_label":"Paywall Wallet"},"lnTx":{"id":"lntx_KYrEuZ77djz6YxhybYNbjUM","memo":"posting problen in lnsolve","expiry":86400,"settled":1,"fee_msat":0,"created_at":1600111631,"expires_at":1600198031,"is_keysend":null,"ln_node_id":"lnod_2s4yfYA","settled_at":1600111650,"dest_pubkey":"033868c219bdb51a33560d854d500fe7d3898a1ad9e05dd89d0007e11313588500","num_satoshis":5,"custom_records":null,"r_hash_decoded":"09394a75a957bb184643be03084347c2c4e7b96a2bfd6866ed47a5efb6d06545","payment_request":"lnbc50n1p04l3q0pp5pyu55adf27a3s3jrhcpsss68ctzw0wt2907ksehdg7j7ldksv4zsdp2wphhxarfdenjqurjda3xcetwyp5kugrvdeek7mrkv5cqzpgxqyz5vqsp5e2cp3zxx3zjs3r7rkknfk0szpyl94mstajdkvvp2h0ahgpjzxetq9qy9qsqznfnm3893m7snklqnlc5uxgqs52k3y5eu3a6rtc07jh8sqp2zeun69dx330qaz8zdhrkl70z23ldd52qe3c3naez9sf4mxyef3yw9wgqcmqvzx","description_hash":null,"payment_preimage":"e7a672e91da4f1afab3bb5d66d4f06a2c45fccebcd90b981843e57624c6594b6"},"wtxType":{"name":"ln_deposit","layer":"ln","display_name":"LN Deposit"},"passThru":{"wallet_id":"wal_Vkih3OPDfEWCva"},"created_at":1600111650,"user_label":"posting problen in lnsolve","num_satoshis":5}}
-    */
 
   }) // app.post('/webhook')
 
@@ -452,7 +472,27 @@ client.connect(function(err) {
       collection_puzzles.updateOne( {'_id': ObjectId(req.body.problem_id)}, {$set: {'answers': answers}} )
       helpers.log("solution submitted");
       res.send('success')
-    })
+
+      // add activity to user in db
+      users = db.collection('users')
+      users.find({'username': doc.poster}).toArray( (err, docs) => {
+
+        user = docs[0]
+        var activity = user.activity
+        // activity.push({'_id': ObjectId(), action: "received_answer", seen: false,
+        //               problem_id: req.body.problem_id, solution_id: newSolution['_id']})
+
+        activity.push({'_id': ObjectId(), action: "received_answer", seen: false,
+                      problem_id: req.body.problem_id, problem_title: doc.title,
+                      problem_description: doc.description, problem_poster: doc.poster, seen:false})
+
+
+        users.updateOne( {'username': doc.poster}, {$set: {'activity': activity}} )
+
+      }) // user.find() - end
+
+    }) // collection_puzzles.find() - end
+
   }) // app.post('/submit_solution')
 
   app.post('/accept_solution', function(req, res){
@@ -474,6 +514,13 @@ client.connect(function(err) {
 
       }
       doc = docs[0]
+
+      if(req.session.userName != "satoshi")
+        if(req.session.userName != doc.poster){
+          res.send('not authenticated')
+          return
+        }
+
       var answers = doc.answers
       answer_index = 0
       // getting solution by _id
@@ -504,8 +551,18 @@ client.connect(function(err) {
       users.find( {'username': solution_poster} ).toArray( (err, user)=>{
         user = user[0]
 
+        // update balance
         balance = user['balance'] + doc['bounty']
         users.updateOne( {'username': solution_poster}, {$set: {'balance': balance}})
+
+        // notify solution poster
+        var activity = user.activity
+        activity.push({'_id': ObjectId(), action: "answer_accepted", seen: false,
+                      problem_id: req.body.problem_id, problem_title: doc.title,
+                      problem_description: doc.description, problem_poster: doc.poster, seen:false})
+
+        users.updateOne( {'username': solution_poster}, {$set: {'activity': activity}} )
+
       })
 
       res.send('success')
@@ -529,7 +586,7 @@ client.connect(function(err) {
 
           var newUser = {username: req.body.id,
                         password: req.body.password,
-                        balance: 0
+                        balance: 0, activity: []
                 };
           user_collection.insertOne(newUser, function(err, res){
             if(err){

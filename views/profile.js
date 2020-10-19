@@ -57,7 +57,7 @@ function show_ln_request(pay_req){ // https://tingle.robinparisi.com/
   });
 
   // set content
-  modal.setContent('<div class=\'modal-content\'><div class=\'modal-content-inner\'><h1>LN-URL Request</h1><div id="qr_code"></div><br><p>Use your lnurl enabled lightning wallet to scan this qr code to withdraw your balance</p></div></div>');
+  modal.setContent('<div class=\'modal-content\'><div class=\'modal-content-inner\'><h1>LN-URL Request</h1><div id="qr_code"></div><br><p>Use your lnurl enabled lightning wallet (like Phoenix wallet) to scan this qr code to withdraw your balance</p></div></div>');
 
   // add a button
   modal.addFooterBtn('Done', 'tingle-btn tingle-btn--primary', function() {

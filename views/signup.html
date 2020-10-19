@@ -39,7 +39,7 @@
             <h class='heading_font'>Sign up</h>
 
           </div>
-          <form>
+          <form onkeypress="return checkSubmit(event)">
             <label class='sub_heading_font' for="username"><b>User name</b></label>
             <input id='username' type="text" placeholder="Enter User Name" name="username" required>
 
@@ -65,7 +65,12 @@
     document.getElementById('nav_submit').href = root_domain+"/submit_a_problem"
     //document.getElementById('nav_signup').href = root_domain+"/signup"
     document.getElementById('nav_signin').href = root_domain+"/signin"
+
+    function checkSubmit(e) {
+       if(e && e.keyCode == 13) {
+          //document.forms[0].submit();
+          document.getElementById('signup_btn').click()
+       }
+    }
   </script>
 </html>
-
-

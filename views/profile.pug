@@ -39,9 +39,9 @@ html
           li(class='')
             a(href=root_domain) Home
           li
-            a(href='./submit_a_problem') Submit Problem
+            a(href=root_domain+'/submit_a_problem') Submit Problem
           li(class='')
-            a(href='./closed_puzzles') Solved Problems
+            a(href=root_domain+'/closed_puzzles') Solved Problems
       
       ul(class='nav navbar-nav navbar-right')
         li
@@ -51,10 +51,9 @@ html
         if userAuthenticated
           div(class="nav navbar-nav navbar-right")
             div(class='dropdown')
-              button(class="dropbtn nav_elements_font")='Hello '+userName+"▼"
+              button(class="dropbtn nav_elements_font badge1")='Hello '+userName+"▼"
               div(class="dropdown-content")
                 a(href=root_domain+'/signout') Sign out
-                a(href='')=balance 
         else
           li
             a(href='./signup')
@@ -67,7 +66,7 @@ html
     
   div(id='main_container')
     div(class='profile-div shadow')
-      div(class='puzzle_card')
+      div(class='profile-data')
         div(class='user-info')
           font(class='sub_heading_font')="Username: "+userName
           font(class='sub_heading_font')="Balance: "+balance+" sats"
@@ -75,3 +74,22 @@ html
         font(id='message') poop
         a(class='btn', onclick='withdraw(\"'+userName+'\",'+balance+')') Withdraw
         
+    div(id='puzzle_feed_div')
+  
+      each val in data
+        div(class='puzzle_card shadow')
+          if val.action == "received_answer"
+            h(class='received_answer_text')="You have received an answer for your question"
+          if val.action == "answer_accepted"
+            h(class='answer_accepted_text')="Your answer has been accepted. You have been rewarded the bounty."
+          if val.action == "posted_problem"
+            h(class='posted_problem_text')="You posted this problem"
+
+          div(class='puzzle_card_title')
+            p(class='puzzle_title_text')= val.problem_title
+          div(class='puzzle_card_poster')
+            p(class='puzzle_poster_text')= '@'+val.problem_poster
+          div(class='puzzle_card_description')
+            p(class='puzzle_description_text')= val.problem_description
+          div(class='puzzle_card_options')
+            a(class='btn', href=root_domain+'/problem/'+val.problem_id) See Problem

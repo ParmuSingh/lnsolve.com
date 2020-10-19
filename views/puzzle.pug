@@ -32,9 +32,16 @@ html
           if userAuthenticated
             div(class="nav navbar-nav navbar-right")
               div(class='dropdown')
-                button(class="dropbtn nav_elements_font")='Hello '+userName+"▼"
+                if show_notification_dot
+                  button(class="dropbtn nav_elements_font badge1", data-badge="!")='Hello '+userName+"▼"
+                else
+                  button(class="dropbtn nav_elements_font")='Hello '+userName+"▼"
+                  
                 div(class="dropdown-content")
-                  a(href=root_domain+'/profile/'+userName) Profile
+                  if show_notification_dot
+                    a(href=root_domain+'/profile/'+userName, class="badge1", data-badge='!') Profile
+                  else
+                    a(href=root_domain+'/profile/'+userName) Profile
                   a(href='')=balance
                   a(href=root_domain+'/signout') Sign out
           else

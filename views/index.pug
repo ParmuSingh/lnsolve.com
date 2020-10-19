@@ -18,23 +18,20 @@ html
     div(class='container-fluid')
       div(class='navbar-header')
         a(class='navbar-brand', href=root_domain) Solve For Me
-    
-      if unsolvedProblems
-        ul(class='nav navbar-nav')
-          li(class='active')
-            a(href=root_domain) Home
+      
+      ul(class='nav navbar-nav')
+        li(class='active')
+          a(href=root_domain) Home
+        li
+          a(href='./submit_a_problem') Submit Problem
+          if unsolvedProblems
+            li
+              a(href='./closed_puzzles') Solved Problems
+          else
+            li(class='active')
+              a(href='./closed_puzzles') Solved Problems
           li
-            a(href='./submit_a_problem') Submit Problem
-          li
-            a(href='./closed_puzzles') Solved Problems
-      else
-        ul(class='nav navbar-nav')
-          li(class='')
-            a(href=root_domain) Home
-          li
-            a(href='./submit_a_problem') Submit Problem
-          li(class='active')
-            a(href='./closed_puzzles') Solved Problems
+            a(href='https://blog.lnpay.co/building-lapps-series-lnsolve.com-using-lnpay') How I built this
       
       ul(class='nav navbar-nav navbar-right')
         li
@@ -44,10 +41,17 @@ html
         if userAuthenticated
           div(class="nav navbar-nav navbar-right")
             div(class='dropdown')
-              button(class="dropbtn nav_elements_font")='Hello '+userName+"▼"
+              if show_notification_dot
+                button(class="dropbtn nav_elements_font badge1", data-badge="!")='Hello '+userName+"▼"
+              else
+                button(class="dropbtn nav_elements_font")='Hello '+userName+"▼"
+                
               div(class="dropdown-content")
-                a(href=root_domain+'/profile/'+userName) Profile
-                a(href='')=balance
+                if show_notification_dot
+                  a(href=root_domain+'/profile/'+userName, class="badge1", data-badge='!') Profile
+                else
+                  a(href=root_domain+'/profile/'+userName) Profile
+                a(href=root_domain+'/profile/'+userName)=balance
                 a(href=root_domain+'/signout') Sign out
         else
           li
@@ -91,4 +95,3 @@ html
           div(class='puzzle_card_options')
             a(class='btn', href='./problem/'+val._id) See Problem
             a(class='btn reward-banner')="Reward: "+val.bounty+" sats"
-

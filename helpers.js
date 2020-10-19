@@ -1,8 +1,7 @@
 var request = require('request');
 var atob = require('atob');
 var btoa = require('btoa');
-
-// If you're cloning this repo make sure to replace wallet and API keys
+const ObjectId = require('mongodb').ObjectId;
 
 module.exports = {
   request_invoice: function (lnsolve_res, amt, db, newProblem, memo="lnsolve"){
@@ -86,6 +85,7 @@ module.exports = {
     };
 
     function callback(error, response, body) {
+      //console.log(body)
         lnsolve_res.send(body)
     }
 
@@ -113,6 +113,22 @@ module.exports = {
           //lnpay.request_invoice(res, bounty)
           res.send("success")
         })
+
+        // add activity to user in db
+        users = db.collection('users')
+        users.find({'username': doc.poster}).toArray( (err, docs) => {
+
+          user = docs[0]
+          var activity = user.activity
+
+          activity.push({'_id': ObjectId(), action: "posted_problem", seen: false,
+                        problem_id: doc['_id'], problem_title: doc.title,
+                        problem_description: doc.description, problem_poster: doc.poster, seen:false})
+
+          users.updateOne( {'username': doc.poster}, {$set: {'activity': activity}} )
+
+        }) // users.find() - end
+
       }
     })
   },

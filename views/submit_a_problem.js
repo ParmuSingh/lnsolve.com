@@ -1,6 +1,6 @@
 root_domain = "https://"+window.location.href.split('/')[2]
 newProblem_id = null
-let publicApiKey = 'pak_...'; // Your public API key here
+let publicApiKey = 'pak_t4n7Hdw2n5EfYye1TCueeehVGyXdhZ8a';
 LNPay.Initialize(publicApiKey);
 
 function sha256(plain_text){
