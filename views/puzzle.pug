@@ -7,6 +7,8 @@ html
     link(href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css", rel='stylesheet')
     script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js')
     script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js')
+    
+    script(async, src="https://ackee.paramdeep.ml/tracker.js", data-ackee-server="https://ackee.paramdeep.ml", data-ackee-domain-id="48c894d9-0bce-4a96-b388-6cff7e8178ba")
 
     script
       include ./puzzle.js
@@ -81,7 +83,7 @@ html
           h(class='heading_font') Answers
         if nAnswers>0
           each val in answers
-            div(class='solution_div')
+            div(id="sol_"+val._id, class='solution_div')
               
               div(class='voting_div shadow')
                 div(class='upvote_div', onclick='vote(\''+val._id+'\', \'up\')')

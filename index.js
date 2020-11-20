@@ -1,5 +1,8 @@
 // this is the main server file
 
+//server_domain = "13.233.237.14:80"
+//server_domain = "https://localhost:10001"
+//server_domain = "lnsolve.com"
 server_domain = "https://lnsolve.com"
 
 
@@ -63,6 +66,8 @@ client.connect(function(err) {
   // root - returns home page
   app.get('/', (req, res) => {
 
+    //helpers.lnurl_withdraw(res, -4000, "negative amount", "parmu")
+    //return
     // Here we're accessing the 'open_puzzles' collection in our mongodb.
     // It says open_puzzles but it contains both open and closed (solved) puzzles.
     collection_puzzles = db.collection('open_puzzles')
@@ -96,6 +101,7 @@ client.connect(function(err) {
         users.find( {"username": req.session.userName} ).toArray( (err, user) => {
           user = user[0]
           var show_notification_dot = false
+
           for(var activity_index=0; activity_index< user.activity.length; activity_index++){
             if(user.activity[activity_index]['seen'] == false){
               show_notification_dot = true
@@ -120,7 +126,7 @@ client.connect(function(err) {
   // It's like root endpoint but filters on 'isSolved': true
   app.get('/closed_puzzles', (req, res) => {
     collection_puzzles = db.collection('open_puzzles')
-    collection_puzzles.find( {'isSolved': true} ).toArray( (err, docs) => {
+    collection_puzzles.find( {'isSolved': true} ).sort( {bounty: -1} ).toArray( (err, docs) => {
       assert.equal(err, null)
 
       if(req.session.userAuthenticated === undefined){
@@ -251,6 +257,8 @@ client.connect(function(err) {
     // get invoice and return to user
     helpers.request_invoice(res, bounty, db, newProblem, memo="posting problem in lnsolve")
 
+
+
     // res.send('success');
   }) // app.post('/submit_a_problem')
 
@@ -271,8 +279,12 @@ client.connect(function(err) {
       doc = docs[0]
       balance = doc['balance']
       activity = doc.activity
+      activity_not_seen = []
 
       for(var activity_index=0; activity_index< activity.length; activity_index++){
+        if(activity[activity_index]['seen'] == false){
+          activity_not_seen.push(activity[activity_index])
+        }
         activity[activity_index]['seen'] = true
       }
       users.updateOne( {'username': username}, {$set: {'activity': activity}})
@@ -281,7 +293,7 @@ client.connect(function(err) {
                             userAuthenticated: true,
                             userName: username,
                             balance: balance,
-                            data: activity
+                            data: activity_not_seen
                           })
 
 
@@ -289,6 +301,16 @@ client.connect(function(err) {
   }) // app.get('/profile/')
 
 //------------------------------------------------- bitcoin -------------------------------------------------//
+  app.post('/generate_invoice_btcpay', function(req, res){
+    if(!req.session.userAuthenticated){
+      res.send('not authenticated')
+      return
+    }
+    btcpay_client.create_invoice({price: 1000, currency: 'BTC'})
+      .then(invoice => res.send(invoice.url) )
+      .catch(err => helpers.log(err))
+  }) // app.post('/generate_invoice')
+
   app.get('/generate_invoice', function(req, res){
     if(!req.session.userAuthenticated){
       res.send('not authenticated')
@@ -338,7 +360,10 @@ client.connect(function(err) {
 
       balance = user['balance']
 
-      if(balance >= amt && balance > 0){
+      if(amt <= 0 || balance <= 0)
+        return
+
+      if(amt>0 && balance >= amt && balance > 0){
         memo = "lnsolve withdrawl for "+user['username']
         helpers.log("lnurl-withdraw requested")
 
@@ -354,10 +379,16 @@ client.connect(function(err) {
 
   app.post('/webhook', function(req, res){
 
+    console.log("info: webhook received")
+
     var created_at = req.body.created_at
     var id = req.body.id
     var event = req.body.event
     var data = req.body.data.wtx
+
+    if(data['passThru']['app'] != 'lnsolve')
+      return
+    console.log("app is lnsolve")
 
     helpers.log("event: "+JSON.stringify(event))
     helpers.log("\ndata: "+JSON.stringify(data))
@@ -388,10 +419,13 @@ client.connect(function(err) {
             users = db.collection('users')
             users.find( {'username': userName} ).toArray( (err, user)=>{
               user = user[0]
-
-              balance = user['balance'] - numSatsPaid
-              if(balance < 0)
+              try{
+                balance = user['balance'] - numSatsPaid
+                if(balance < 0)
+                  balance = 0
+              }catch(err){
                 balance = 0
+              }
               users.updateOne( {'username': userName}, {$set: {'balance': balance}})
             } )
             //users.updateOne( {'ln_txid': }, {$set: {'answers': answers}} )
@@ -402,6 +436,12 @@ client.connect(function(err) {
     }else{
         res.send("OK")
     }
+
+    /*
+    event: {"id":"520","type":"wallet","name":"wallet_receive","display_name":"Wallet Receive"}
+
+    data: {"wtx":{"id":"wtx_A2o6sRS2KO2ljvI93ExaaPn","wal":{"id":"wal_Vkih3OPDfEWCva","balance":1037,"created_at":1598195618,"statusType":{"name":"active","type":"wallet","display_name":"Active"},"updated_at":1600111650,"user_label":"Paywall Wallet"},"lnTx":{"id":"lntx_KYrEuZ77djz6YxhybYNbjUM","memo":"posting problen in lnsolve","expiry":86400,"settled":1,"fee_msat":0,"created_at":1600111631,"expires_at":1600198031,"is_keysend":null,"ln_node_id":"lnod_2s4yfYA","settled_at":1600111650,"dest_pubkey":"033868c219bdb51a33560d854d500fe7d3898a1ad9e05dd89d0007e11313588500","num_satoshis":5,"custom_records":null,"r_hash_decoded":"09394a75a957bb184643be03084347c2c4e7b96a2bfd6866ed47a5efb6d06545","payment_request":"lnbc50n1p04l3q0pp5pyu55adf27a3s3jrhcpsss68ctzw0wt2907ksehdg7j7ldksv4zsdp2wphhxarfdenjqurjda3xcetwyp5kugrvdeek7mrkv5cqzpgxqyz5vqsp5e2cp3zxx3zjs3r7rkknfk0szpyl94mstajdkvvp2h0ahgpjzxetq9qy9qsqznfnm3893m7snklqnlc5uxgqs52k3y5eu3a6rtc07jh8sqp2zeun69dx330qaz8zdhrkl70z23ldd52qe3c3naez9sf4mxyef3yw9wgqcmqvzx","description_hash":null,"payment_preimage":"e7a672e91da4f1afab3bb5d66d4f06a2c45fccebcd90b981843e57624c6594b6"},"wtxType":{"name":"ln_deposit","layer":"ln","display_name":"LN Deposit"},"passThru":{"wallet_id":"wal_Vkih3OPDfEWCva"},"created_at":1600111650,"user_label":"posting problen in lnsolve","num_satoshis":5}}
+    */
 
   }) // app.post('/webhook')
 
@@ -571,6 +611,14 @@ client.connect(function(err) {
   }) // app.post('/accept_solution')
 
   app.post('/signup', function(req, res){
+    /*
+    $.post('http://localhost:10000/signup',   // url
+    { id: 'parmu', password: "poop" }, // data to be submit
+    function(data, status, jqXHR) {// success callback
+      //$('p').append('status: ' + status + ', data: ' + data);
+      helpers.log(data)
+    })
+    */
 
     if(!req.body.id || !req.body.password){
         res.status("400");

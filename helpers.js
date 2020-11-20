@@ -10,16 +10,18 @@ module.exports = {
       'Content-Type': 'application/json'
     };
 
-    var dataString = '{"num_satoshis":'+amt+', "memo":"'+memo+'"}';
+    passThruData = JSON.stringify({app: 'lnsolve'})
+    var dataString = '{"num_satoshis":'+amt+', "memo":"'+memo+'", "passThru":'+passThruData+'}';
     //var dataString = '{"num_satoshis": 20, "memo": "lnsolve"}';
 
+    //passThruData = btoa(JSON.stringify({app: 'lnsolve'})) // reverse by atob
     var options = {
-      url: 'https://lnpay.co/v1/user/wallet/<insert-wallet-key>/invoice',
+      url: 'https://lnpay.co/v1/user/wallet/waki_iHxeX1numTh3gTpqmddCdPl/invoice',
       method: 'POST',
       headers: headers,
       body: dataString,
       auth: {
-        'user': 'sak_...', // Your secret API key
+        'user': 'sak_...',
         'pass': ''
       }
     };
@@ -56,12 +58,12 @@ module.exports = {
     var dataString = '{"payment_request":"'+pay_req+'"}';
 
     var options = {
-        url: 'https://lnpay.co/v1/wallet/<insert-wallet-key>/withdraw',
+        url: 'https://lnpay.co/v1/wallet/waka_jInh6NZiLrXxu8ak8zsgWHC/withdraw',
         method: 'POST',
         headers: headers,
         body: dataString,
         auth: {
-            'user': 'sak_...', // Your secret API key
+            'user': 'sak_...',
             'pass': ''
         }
     };
@@ -75,11 +77,12 @@ module.exports = {
 
     // according to doc: https://docs.lnpay.co/wallet/lnurl-withdraw
     // passThru is base64 encoded json of data to use in webhooks, etc
-    passThruData = btoa(JSON.stringify({username: userName})) // reverse by atob()
+
+    passThruData = btoa(JSON.stringify({username: userName, app: 'lnsolve'})) // reverse by atob()
     var options = {
-        url: 'https://lnpay.co/v1/wallet/<insert-wallet-key>/lnurl/withdraw?passThru='+passThruData+'&num_satoshis='+amt+'&memo='+memo,
+        url: 'https://lnpay.co/v1/wallet/waka_jInh6NZiLrXxu8ak8zsgWHC/lnurl/withdraw?passThru='+passThruData+'&num_satoshis='+amt+'&memo='+memo,
         auth: {
-            'user': 'sak_...', // Your secret API key
+            'user': 'sak_...',
             'pass': ''
         }
     };

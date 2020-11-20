@@ -31,7 +31,7 @@ function submit_solution(){
         }else if(data == "not authenticated"){
           document.getElementById('message').innerHTML = 'You have to be logged in to answer.'
           document.getElementById('message').style.display = 'flex'
-
+          //window.location.replace('https://localhost:10000/signin')
         }
   })
 }
@@ -53,6 +53,7 @@ function accept_solution(solution_id){
         }else if(data == "not authenticated"){
           document.getElementById('message-'+solution_id).innerHTML = 'You have to be logged in to answer.'
           document.getElementById('message-'+solution_id).style.display = 'flex'
+          //window.location.replace('https://localhost:10000/signin')
         }else if(data == "another_solution_already_accepted"){
           document.getElementById('message-'+solution_id).innerHTML = 'You\'ve already accepted an answer.'
           document.getElementById('message-'+solution_id).style.display = 'flex'
